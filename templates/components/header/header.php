@@ -1,3 +1,15 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['exit'])) {
+    // Проверка нажатия кнопки "Выйти"
+
+    session_destroy();
+    header("Location:" . LOGIN_PAGE['url']);
+
+    if (!isset($_SESSION['loggedin'])) {
+        header("Location:" . LOGIN_PAGE['url']);
+    }
+}
+?>
 <script src="templates/components/header/header.js" defer></script>
 
 <nav class="bg-gray-900 shadow">
@@ -34,6 +46,11 @@
                         <a href="<?= SOCIALS_PAGE['url'] ?>"
                             class="text-white hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"><?= SOCIALS_PAGE['name'] ?></a>
                         <?php if (isset($_SESSION['loggedin'])): ?>
+
+                            <?php if (isset($_SESSION['userRoleId'])): ?>
+                                <a href="<?= ADMIN_PAGE['url'] ?>"
+                                    class="text-white hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"><?= ADMIN_PAGE['name'] ?></a>
+                            <?php endif; ?>
                             <a href="<?= CABINET_PAGE['url'] ?>"
                                 class="text-white hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"><?= CABINET_PAGE['name'] ?></a>
                             <form method="POST" action="">

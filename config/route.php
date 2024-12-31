@@ -1,6 +1,5 @@
 <?php
 $requestUri = $_SERVER['REQUEST_URI'];
-
 // Обработка маршрутов
 if ($requestUri === REGISTER_PAGE['url']) {
     require_once(REGISTER_PAGE['file']);
@@ -18,6 +17,8 @@ if ($requestUri === REGISTER_PAGE['url']) {
     require_once(ADMIN_EVENTS_PAGE['file']);
 } elseif ($requestUri === ADMIN_LESSON_PAGE['url']) {
     require_once(ADMIN_LESSON_PAGE['file']);
+} elseif ($requestUri === ADMIN_PAGE['url']) {
+    require_once(ADMIN_PAGE['file']);
 } elseif (preg_match('/^\/video\/\d+$/', $requestUri)) {
     // Если URL соответствует /video/2, /video/3 и т.д.
     require_once(VIDEO_PAGE['file']);

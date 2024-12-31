@@ -1,4 +1,11 @@
 <?php
+require_once("models/Database.php");
+require_once("models/UserModel.php");
+require_once("models/CourseModel.php");
+require_once("models/RoleModel.php");
+
+
+
 function isFieldsEmpty(
     string $email,
     string $username,
@@ -26,70 +33,54 @@ function isFieldsEmpty(
         array_push($errors, "Пароли не совпадают");
     }
 
-    if (count($errors) > 0) {
-        require_once("templates/register.php");
-        return $errors;
-    }
-    return [];
+    return $errors;
 }
 
-function isUserExists($mysqli, string $username, string $email)
-{
-    $sql = "SELECT id FROM users WHERE username=? OR email=?";
-    $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param("ss", $username, $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+$roles = RoleModel::getAllRoles();
+$courses = CourseModel::getAllCourses();
 
-    return $result->num_rows > 0; // Return true if user exists
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
+    // Инициализация соединения с базой данных
+    $mysqli = Database::getConnection();
 
     $email = $mysqli->real_escape_string($_POST['email']);
     $username = $mysqli->real_escape_string($_POST['username']);
     $password = $mysqli->real_escape_string($_POST['password']);
     $repassword = $mysqli->real_escape_string($_POST['repassword']);
+    $roleId = (int) $_POST['role_id']; // Приведение к типу int
+    $courseId = (int) $_POST['course_id']; // Приведение к типу int
 
     $errors = isFieldsEmpty($email, $username, $password, $repassword);
 
     if (!empty($errors)) {
-        // If there are errors, show the registration form again
         require_once("templates/register.php");
         return;
     }
 
-    // Check if user already exists
-    if (isUserExists($mysqli, $username, $email)) {
+    $userModel = new UserModel();
+    if ($userModel->isUserExists($username, $email)) {
         $errors[] = "Такой пользователь уже существует"; // Add error message
         require_once("templates/register.php");
         return;
     }
 
-    $password = password_hash($password, PASSWORD_DEFAULT);
-    $sql = "INSERT INTO users (email, username, password) values (?,?,?)";
-    $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param('sss', $email, $username, $password);
-    $stmt->execute();
-
-    $sql = "SELECT id from users where username=?";
-    $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-    session_regenerate_id();
-    $_SESSION["loggedin"] = TRUE;
-    $_SESSION["username"] = $username;
-    $_SESSION["userId"] = $user["id"];
-
-    header("Location: " . CABINET_PAGE['url']);
-
+    $regSuccess = $userModel->createUser($email, $username, $password, $roleId, $courseId);
+    if ($regSuccess) {
+        $user = $userModel->getUserByUsername($username);
+        if ($user) {
+            header("Location: " . CABINET_PAGE['url']);
+            $_SESSION["loggedin"] = TRUE;
+            $_SESSION["userId"] = $user->getId();
+            $_SESSION["username"] = $user->getUsername();
+            $_SESSION["userRoleId"] = $user->getRoleId();
+            exit(); // Завершение скрипта после редиректа
+        } else {
+            $errors[] = "Ошибка при входе. Проверьте свои учетные данные.";
+        }
+    } else {
+        $errors[] = "Ошибка при регистрации. Пожалуйста, попробуйте еще раз.";
+    }
 }
-
-
-
 
 
 require_once("templates/register.php");

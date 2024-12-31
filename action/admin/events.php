@@ -2,7 +2,7 @@
 require_once("models/UserModel.php");
 require_once("models/EventModel.php");
 
-$users = getAllUsers();
+$users = UserModel::getAllUsers();
 
 // Проверяем, была ли отправлена форма
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {

@@ -46,6 +46,11 @@ const VIDEO_PAGE = [
     'name' => 'Видео занятия',
     'file' => 'action/video.php',
 ];
+const ADMIN_PAGE = [
+    'url' => '/admin',
+    'name' => 'Админ панель',
+    'file' => 'action/admin/admin.php',
+];
 const ADMIN_EVENTS_PAGE = [
     'url' => '/admin/events',
     'name' => 'Заплонировать занятие',

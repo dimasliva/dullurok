@@ -30,27 +30,53 @@
                             <input type="email" name="email" id="email"
                                 value="<?= isset($email) ? htmlspecialchars($email) : '' ?>"
                                 class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                                placeholder="name@company.com">
+                                placeholder="name@company.com" required>
                         </div>
                         <div>
                             <label for="username" class="block mb-2 text-sm font-medium">Username</label>
                             <input type="text" name="username" id="username"
                                 value="<?= isset($username) ? htmlspecialchars($username) : '' ?>"
                                 placeholder="Ваше имя пользователя"
-                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                required>
                         </div>
                         <div>
                             <label for="password" class="block mb-2 text-sm font-medium">Пароль</label>
                             <input type="password" name="password" id="password" placeholder="••••••••"
-                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                required>
                         </div>
                         <div>
-                            <label for="repassword" class="block mb-2 text-sm font-medium">Подтвердите
-                                пароль</label>
+                            <label for="repassword" class="block mb-2 text-sm font-medium">Подтвердите пароль</label>
                             <input type="password" name="repassword" id="repassword" placeholder="••••••••"
-                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                required>
                         </div>
-                        <button type="submit"
+                        <div>
+                            <label for="role_id" class="block mb-2 text-sm font-medium">Роль</label>
+                            <select name="role_id" id="role_id"
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                <option value="">Выберите роль</option>
+                                <?php foreach ($roles as $role): ?>
+                                    <option value="<?= htmlspecialchars($role->getId()) ?>">
+                                        <?= htmlspecialchars($role->getRoleName()) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="course_id" class="block mb-2 text-sm font-medium">Курс</label>
+                            <select name="course_id" id="course_id"
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                <option value="">Выберите курс</option>
+                                <?php foreach ($courses as $course): ?>
+                                    <option value="<?= htmlspecialchars($course->getId()) ?>">
+                                        <?= htmlspecialchars($course->getCourseName()) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <button type="submit" name="register"
                             class="w-full text-white pointer bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">Создать
                             аккаунт</button>
 
@@ -64,13 +90,12 @@
                             <?php endif; ?>
                         </div>
 
-
                         <p class="text-sm font-light text-gray-400">
                             У вас уже есть аккаунт? <a href="<?= LOGIN_PAGE['url'] ?>"
-                                class="font-medium text-primary-600 hover:underline">Войдите
-                                здесь</a>
+                                class="font-medium text-primary-600 hover:underline">Войдите здесь</a>
                         </p>
                     </form>
+
                 </div>
             </div>
         </div>

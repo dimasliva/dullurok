@@ -37,7 +37,7 @@
                                 class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                 required="">
                         </div>
-                        <button type="submit"
+                        <button type="submit" name="login"
                             class="w-full text-white pointer bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">Создать
                             аккаунт</button>
                         <div>
