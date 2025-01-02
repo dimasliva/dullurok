@@ -41,6 +41,21 @@
                                 required>
                         </div>
                         <div>
+                            <label for="name" class="block mb-2 text-sm font-medium">Имя</label>
+                            <input type="text" name="name" id="name"
+                                value="<?= isset($name) ? htmlspecialchars($name) : '' ?>" placeholder="Ваше имя"
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                required>
+                        </div>
+                        <div>
+                            <label for="surname" class="block mb-2 text-sm font-medium">Фамилия</label>
+                            <input type="text" name="surname" id="surname"
+                                value="<?= isset($surname) ? htmlspecialchars($surname) : '' ?>"
+                                placeholder="Ваша фамилия"
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                required>
+                        </div>
+                        <div>
                             <label for="password" class="block mb-2 text-sm font-medium">Пароль</label>
                             <input type="password" name="password" id="password" placeholder="••••••••"
                                 class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -51,18 +66,6 @@
                             <input type="password" name="repassword" id="repassword" placeholder="••••••••"
                                 class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                 required>
-                        </div>
-                        <div>
-                            <label for="role_id" class="block mb-2 text-sm font-medium">Роль</label>
-                            <select name="role_id" id="role_id"
-                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                <option value="">Выберите роль</option>
-                                <?php foreach ($roles as $role): ?>
-                                    <option value="<?= htmlspecialchars($role->getId()) ?>">
-                                        <?= htmlspecialchars($role->getRoleName()) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
                         </div>
                         <div>
                             <label for="course_id" class="block mb-2 text-sm font-medium">Курс</label>
@@ -95,6 +98,7 @@
                                 class="font-medium text-primary-600 hover:underline">Войдите здесь</a>
                         </p>
                     </form>
+
 
                 </div>
             </div>

@@ -50,9 +50,9 @@ $eventsJson = json_encode($eventsArray);
     </div>
 
     <div id="modal" class="fixed flex inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-        <div class="bg-gray-800 rounded-lg p-5 w-80">
-            <h3 id="modalTitle" class="text-lg font-bold mb-2"></h3> <!-- Изменено id на modalTitle -->
-            <div id="modalContent" class="text-white"></div>
+        <div class="bg-gray-800 rounded-lg p-5  max-h-[80vh] overflow-auto">
+            <h3 id="modalTitle" class="text-lg font-bold mb-2 text-center"></h3> <!-- Изменено id на modalTitle -->
+            <pre id="modalContent" class="text-white overflow-auto text-center"></pre> <!-- Добавлено overflow-auto -->
             <button id="closeModal" class="mt-4 bg-gray-700 hover:bg-gray-600 p-2 rounded">Закрыть</button>
         </div>
     </div>

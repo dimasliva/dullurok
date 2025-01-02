@@ -15,8 +15,27 @@
 
 <body class="bg-gray-900 text-white">
     <?php require_once("templates/components/header/header.php") ?>
-    <div class="container mx-auto p-8 flex">
-        <div class="flex-1">
+
+    <!-- Иконка для открытия/закрытия sidebar -->
+    <button id="toggle-sidebar" class="p-2 bg-gray-800 rounded focus:outline-none">
+        <span class="material-icons">menu</span> <!-- Используйте Material Icons или любую другую иконку -->
+    </button>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <div id="sidebar"
+            class="fixed inset-y-0 left-0 bg-gray-800 w-64 transform -translate-x-full transition-transform duration-300">
+            <div class="p-4">
+                <h2 class="text-xl font-semibold mb-4">Навигация</h2>
+                <ul>
+                    <li class="mb-2"><a href="#" class="text-blue-400 hover:underline">Профиль</a></li>
+                    <li class="mb-2"><a href="#" class="text-blue-400 hover:underline">Мои занятия</a></li>
+                    <li class="mb-2"><a href="#" class="text-blue-400 hover:underline">Купить занятие</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container mx-auto p-8 flex-1">
             <h1 class="text-2xl font-bold mb-6">Кабинет пользователя</h1>
 
             <div class="grid grid-cols-4 gap-6">
@@ -30,21 +49,15 @@
                                 <div class="bg-gray-800 shadow-md rounded-lg p-4">
                                     <h3 class="font-bold text-lg"><?= "Занятие " . $lesson->getId() ?> </h3>
                                     <p class="text-gray-400">Дата: <?= $lesson->getCreatedAt() ?></p>
-                                    <a href="<?= VIDEO_PAGE['url'] . '/' . $lesson->getId() ?>"
-                                        class="text-blue-400 hover:underline">Смотреть
-                                        видео</a>
-                                    <div class="mt-2 flex items-center cursor-pointer	">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 inline" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 4v16m8-8H4" />
-                                        </svg>
-                                        <a class="text-gray-400 hover:underline" href="<?= $lesson->getFile() ?>">Файл</a>
+                                    <a href="<?= LESSON_VIDEO_PAGE['url'] . '/' . $lesson->getId() ?>"
+                                        class="text-blue-400 hover:underline">Смотреть урок</a>
+                                    <div class="mt-2 flex items-center cursor-pointer">
+                                        <a class="text-gray-400 hover:underline" href="<?= $lesson->getFile() ?>">Скачать
+                                            код</a>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         <?php endif; ?>
-
                     </div>
                 </div>
 
@@ -68,6 +81,29 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleButton = document.getElementById('toggle-sidebar');
+            const sidebar = document.getElementById('sidebar');
+
+            toggleButton.addEventListener('click', function () {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+
+            // Закрытие sidebar при клике вне его области
+            document.addEventListener('click', function (event) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickToggleButton = toggleButton.contains(event.target);
+
+                // Если клик был вне sidebar и не на кнопке
+                if (!isClickInsideSidebar && !isClickToggleButton) {
+                    sidebar.classList.add('-translate-x-full'); // Закрываем sidebar
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

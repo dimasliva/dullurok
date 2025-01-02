@@ -7,9 +7,9 @@ define("DB_NAME", $env["DB_NAME"]);
 
 const LOGO_NAME = "DullUrok";
 const URL_SITE = "https://dull.local/";
-const IMGS_PATH = "./css/images";
+const IMGS_PATH = "/css/images";
 const SVGS_PATH = "./css/svgs";
-const STYLES_PATH = "./css/styles";
+const STYLES_PATH = "/css/styles";
 
 const HOME_PAGE = [
     'url' => '/',
@@ -41,9 +41,14 @@ const CABINET_PAGE = [
     'name' => 'Личный кабинет',
     'file' => 'action/cabinet.php',
 ];
+const LESSON_VIDEO_PAGE = [
+    'url' => '/lesson/video',
+    'name' => 'Видео занятия',
+    'file' => 'action/lesson_video.php',
+];
 const VIDEO_PAGE = [
     'url' => '/video',
-    'name' => 'Видео занятия',
+    'name' => 'Видео урока',
     'file' => 'action/video.php',
 ];
 const ADMIN_PAGE = [
@@ -61,4 +66,10 @@ const ADMIN_LESSON_PAGE = [
     'name' => 'Добавить занятие',
     'file' => 'action/admin/lesson.php',
 ];
+const DONATION_PAGE = [
+    'url' => '/donation',
+    'name' => 'Пожертвование',
+    'file' => 'action/donation.php',
+];
+
 ?>

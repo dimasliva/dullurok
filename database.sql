@@ -1,71 +1,115 @@
+-- Создание таблицы ролей
 CREATE TABLE IF NOT EXISTS roles (
-    id INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     role_name VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Создание таблицы курсов
 CREATE TABLE IF NOT EXISTS courses (
-    id INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     course_name VARCHAR(100) NOT NULL,
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
-CREATE TABLE IF NOT EXISTS `users` (
-    `id` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `email` VARCHAR(255) NOT NULL,
-    `username` VARCHAR(255) UNIQUE NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
-    `role_id` INT(20) UNSIGNED,  -- Новая колонка для роли
-    `course_id` INT(20) UNSIGNED,  -- Новая колонка для курса
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Новая колонка для времени создания
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`role_id`) REFERENCES roles(`id`),  -- Внешний ключ для роли
-    FOREIGN KEY (`course_id`) REFERENCES courses(`id`)  -- Внешний ключ для курса
+-- Создание таблицы пользователей (предположительно, она уже существует)
+CREATE TABLE IF NOT EXISTS users (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(50),
+    surname VARCHAR(50),
+    role_id INT UNSIGNED,
+    course_id INT UNSIGNED,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (role_id) REFERENCES roles(id),
+    FOREIGN KEY (course_id) REFERENCES courses(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Создание таблицы уроков
+CREATE TABLE IF NOT EXISTS lessons (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    file VARCHAR(255),
+    video VARCHAR(255),
+    user_id INT UNSIGNED,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Создание таблицы событий
+CREATE TABLE IF NOT EXISTS events (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
+    event_date DATETIME NOT NULL,
+    description TEXT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Создание таблицы категорий
+CREATE TABLE IF NOT EXISTS categories (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Создание таблицы статей
+CREATE TABLE IF NOT EXISTS articles (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    userId INT UNSIGNED NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    category_id INT UNSIGNED,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Таблица для хранения информации о видео
+CREATE TABLE videos (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,  -- Уникальный идентификатор видео
+    title VARCHAR(255) NOT NULL,        -- Заголовок видео
+    description TEXT,                    -- Описание видео
+    url VARCHAR(255) NOT NULL,            -- Ссылка на видео
+    pic VARCHAR(255) NOT NULL            -- Ссылка на видео
+);
+
+-- Таблица для хранения комментариев
+CREATE TABLE comments (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,   -- Уникальный идентификатор комментария
+    video_id INT UNSIGNED NOT NULL,               -- Идентификатор видео, к которому относится комментарий
+    comment TEXT NOT NULL,                -- Текст комментария
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Дата и время создания комментария
+    FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE -- Связь с таблицей videos
+);
+
+-- Заполнение таблицы ролей
 INSERT INTO roles (role_name) VALUES
 ('Admin'),
 ('Student');
 
+-- Заполнение таблицы курсов
 INSERT INTO courses (course_name, description) VALUES
-('HTML CSS', 'Learn the basics of programming using Python.'),
+('HTML CSS', 'Learn the basics of programming using HTML and CSS.'),
 ('Javascript', 'Understand the principles of database design and SQL.'),
-('C++ SDL2', 'Create dynamic websites using HTML, CSS, and JavaScript.');
+('C++ SDL2', 'Create dynamic websites using C++ and SDL2.');
 
-INSERT INTO `users` (email, username, password, role_id, course_id) VALUES
-('user1@example.com', 'user1', 'password1', 1, 1),  -- Студент, курс 1
-('user2@example.com', 'user2', 'password2', 2, 2),  -- Инструктор, курс 2
-('user3@example.com', 'user3', 'password3', 2, 3);  -- Студент, курс 3
-
-CREATE TABLE IF NOT EXISTS `events` (
-    `id` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id` INT(20) UNSIGNED NOT NULL,  -- Внешний ключ для связи с пользователем
-    `event_date` DATETIME NOT NULL,  -- Дата и время события
-    `description` TEXT,  -- Описание события
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE  -- Внешний ключ для связи с пользователем
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO `events` (`user_id`,  `event_date`, `description`) VALUES
-(1,  '2024-12-15 18:00:00', 'Обсуждение основ SQL и практические задачи.'),
-(1,  '2024-12-30 10:00:00', 'Введение в программирование на Python.'),
-(1, '2024-11-01 14:00:00',  'Изучение основ JavaScript и его применения.'),
-(1,  '2025-01-10 16:00:00', 'Практические занятия по графическому дизайну.'),
-(1, '2025-02-25 09:00:00', 'Обсуждение новых технологий и трендов в ИТ.');
--- Создание таблицы категорий
-CREATE TABLE IF NOT EXISTS `categories` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- Заполнение таблицы пользователей
+INSERT INTO users (email, username, password, name, surname, role_id, course_id) VALUES
+('john.doe@example.com', 'johndoe', 'hashed_password_1', 'John', 'Doe', 1, 1),
+('jane.smith@example.com', 'janesmith', 'hashed_password_2', 'Jane', 'Smith', 2, 2),
+('alice.johnson@example.com', 'alicejohnson', 'hashed_password_3', 'Alice', 'Johnson', 2, 3),
+('bob.brown@example.com', 'bobbrown', 'hashed_password_4', 'Bob', 'Brown', 2, 1);
 
 -- Заполнение таблицы категорий
-INSERT INTO `categories` (name) VALUES
+INSERT INTO categories (name) VALUES
 ('Technology'),
 ('Science'),
 ('Health'),
@@ -75,22 +119,8 @@ INSERT INTO `categories` (name) VALUES
 ('Travel'),
 ('Lifestyle');
 
--- Создание таблицы статей
-CREATE TABLE IF NOT EXISTS `articles` (
-    `id` INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `userId` INT(20) UNSIGNED NOT NULL,
-    `title` VARCHAR(255) NOT NULL,
-    `category_id` INT,
-    `content` TEXT NOT NULL,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- Заполнение таблицы статей
-INSERT INTO `articles` (userId, title, category_id, content) VALUES
+INSERT INTO articles (userId, title, category_id, content) VALUES
 (1, 'The Rise of AI', 1, 'Artificial Intelligence (AI) is rapidly transforming various industries.'),
 (2, 'The Wonders of Space', 2, 'Space exploration has unveiled many mysteries of the universe.'),
 (1, 'Healthy Living Tips', 3, 'Incorporating healthy habits can significantly improve your life.'),
@@ -100,30 +130,23 @@ INSERT INTO `articles` (userId, title, category_id, content) VALUES
 (3, 'Traveling the World', 7, 'Exploring new cultures and places is an enriching experience.'),
 (2, 'The Art of Cooking', 8, 'Cooking is not just a necessity, but a form of art.');
 
-CREATE TABLE IF NOT EXISTS `lessons` (
-    `id` INT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `file` VARCHAR(255),
-    `video` VARCHAR(255),
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- Заполнение таблицы уроков
-INSERT INTO `lessons` (file, video) VALUES
-('/upload/lesson1.zip', 'https://rutube.ru/play/embed/cbff38f0459847008167bde434bf04cd'),
-('/upload/lesson2.zip', 'https://rutube.ru/play/embed/cbff38f0459847008167bde434bf04cd'),
-('/upload/lesson3.zip', 'https://rutube.ru/play/embed/cbff38f0459847008167bde434bf04cd');
+INSERT INTO lessons (file, video, user_id) VALUES
+('lesson1.zip', 'https://rutube.ru/play/embed/9e37e6db0cc6a20a34bc7645f67a83d9', 1),
+('lesson2.zip', 'https://rutube.ru/play/embed/9e37e6db0cc6a20a34bc7645f67a83d9', 1),
+('lesson3.zip', 'https://rutube.ru/play/embed/9e37e6db0cc6a20a34bc7645f67a83d9', 2),
+('lesson4.zip', 'https://rutube.ru/play/embed/9e37e6db0cc6a20a34bc7645f67a83d9', 3),
+('lesson5.zip', 'https://rutube.ru/play/embed/9e37e6db0cc6a20a34bc7645f67a83d9', 2);
 
-CREATE TABLE IF NOT EXISTS `user_lessons` (
-    `user_id` INT(20) UNSIGNED NOT NULL,
-    `lesson_id` INT(20) UNSIGNED NOT NULL,
-    PRIMARY KEY (`user_id`, `lesson_id`),
-    FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`lesson_id`) REFERENCES lessons(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO videos (title, description, url, pic) VALUES
+('Видеоурок по MySQL', 'Этот видеоурок объясняет основы работы с MySQL.', 'https://rutube.ru/play/embed/9e37e6db0cc6a20a34bc7645f67a83d9', 'https://pic.rutubelist.ru/video/2024-12-30/7d/86/7d86b45313c5de27257596e1b4362bca.jpg'),
+('Как создать веб-сайт', 'В этом видео мы рассмотрим шаги по созданию веб-сайта.', 'https://rutube.ru/play/embed/9e37e6db0cc6a20a34bc7645f67a83d9', 'https://pic.rutubelist.ru/video/2024-12-30/7d/86/7d86b45313c5de27257596e1b4362bca.jpg'),
+('Изучаем Python', 'В этом видео мы начнем изучение языка программирования Python.', 'https://rutube.ru/play/embed/9e37e6db0cc6a20a34bc7645f67a83d9', 'https://pic.rutubelist.ru/video/2024-12-30/7d/86/7d86b45313c5de27257596e1b4362bca.jpg');
 
-INSERT INTO `user_lessons` (user_id, lesson_id) VALUES
-(1, 1),  
-(1, 2),  
-(2, 1),  
-(2, 3),  
-(3, 2);
+INSERT INTO comments (video_id, comment) VALUES
+(1, 'Отличное видео! Очень полезно.'),
+(1, 'Спасибо за объяснение.'),
+(2, 'Хорошие советы по созданию сайтов.'),
+(2, 'С нетерпением жду следующую часть.'),
+(3, 'Очень интересно!'),
+(3, 'Не могли бы вы объяснить подробнее?');

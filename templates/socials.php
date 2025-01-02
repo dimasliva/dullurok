@@ -9,17 +9,17 @@
     <meta name="keywords" content="веб-разработка, Rutube, Dzen, Telegram, YouTube, Nuum, HTML, CSS, JavaScript, уроки">
     <meta name="author" content="<?= LOGO_NAME ?>">
     <title>Социальные сети - Веб-разработка</title>
-    <link rel=“canonical” href="<?= URL_SITE ?>social" />
+    <link rel="canonical" href="<?= URL_SITE ?>social" />
     <link rel="stylesheet" href="<?= STYLES_PATH ?>/global.css" />
     <link rel="stylesheet" href="<?= STYLES_PATH ?>/tailwind.css">
-    <title>Document</title>
 </head>
 
 <body>
-    <?php require_once("templates/components/header/header.php") ?>
+    <?php require_once("templates/components/header/header.php"); ?>
+
     <div class="container mx-auto p-6">
         <h1 class="text-3xl font-bold mb-6 text-center">Социальные сети</h1>
-        <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 p-8">
             <?php
             $items = [
                 [
@@ -35,7 +35,7 @@
                     'description' => 'Добро пожаловать на наш канал Rutube, где мы делимся знаниями о веб-разработке! Изучите HTML, CSS и JavaScript с нашими увлекательными уроками, подходящими как для начинающих, так и для опытных разработчиков. Погрузитесь в продвинутые техники, практические проекты и полезные советы, которые помогут вам стать настоящим профессионалом в этой области.'
                 ],
                 [
-                    'url' => 'https://dzen.ru/id/66e52f9fe670f574c1dfbe1d?share_to=link',
+                    'url' => 'https://dzen.ru/developerblog',
                     'img' => 'dzen.png',
                     'name' => 'Dzen',
                     'description' => 'На нашем канале Dzen вы найдете актуальные и интересные статьи по программированию. Мы охватываем популярные языки и технологии, такие как HTML, CSS, JavaScript и C++. Присоединяйтесь к нам, чтобы расширить свои знания и оставаться в курсе последних трендов в мире веб-разработки!'
@@ -46,22 +46,23 @@
                     'name' => 'Telegram',
                     'description' => 'Присоединяйтесь к нашему каналу в Telegram, где я, ваш виртуальный помощник, помогу вам освоить веб-разработку. Мы предлагаем поддержку в разработке дизайна, обучении HTML, CSS и JavaScript, а также советы по оптимизации производительности и SEO. Начните свой путь к успеху в веб-разработке прямо сейчас!'
                 ],
-
             ];
-
-
-            foreach ($items as $item) {
-                echo '
-            <div class="flex flex-col items-center transition-transform transform hover:scale-105 group my-2">
-                <a href="' . $item['url'] . '" target="_blank" class="flex flex-col items-center">
-                    <img src="' . IMGS_PATH . '/' . $item['img'] . '" alt="' . $item['name'] . '" class="w-full h-auto max-w-[150px] mb-2" />
-                    <span class="text-4xl font-bold my-2">' . $item['name'] . '</span>
-                </a>
-                <p class="text-center max-h-16 overflow-hidden transition-all duration-300 description">' . $item['description'] . '</p>
-                <button class="mt-2 text-blue-500 toggle-description">Читать дальше</button>
-            </div>';
-            }
             ?>
+
+            <!-- Вставка элементов в HTML -->
+            <?php foreach ($items as $item): ?>
+                <div class="flex flex-col items-center transition-transform transform hover:scale-105 group my-2">
+                    <a href="<?= $item['url'] ?>" target="_blank" class="flex flex-col items-center">
+                        <img src="<?= IMGS_PATH . '/' . $item['img'] ?>" alt="<?= $item['name'] ?>"
+                            class="w-full h-auto max-w-[150px] mb-2" />
+                        <span class="text-4xl font-bold my-2"><?= $item['name'] ?></span>
+                    </a>
+                    <p class="text-center max-h-16 overflow-hidden transition-all duration-300 description">
+                        <?= $item['description'] ?>
+                    </p>
+                    <button class="mt-2 text-blue-500 toggle-description">Читать дальше</button>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 

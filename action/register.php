@@ -10,7 +10,9 @@ function isFieldsEmpty(
     string $email,
     string $username,
     string $password,
-    string $repassword
+    string $repassword,
+    string $name,
+    string $surname
 ) {
     $errors = [];
     if (empty($email)) {
@@ -33,10 +35,18 @@ function isFieldsEmpty(
         array_push($errors, "Пароли не совпадают");
     }
 
+    if (empty($name)) {
+        array_push($errors, "Введите имя");
+    }
+
+    if (empty($surname)) {
+        array_push($errors, "Введите фамилию");
+    }
+
     return $errors;
 }
 
-$roles = RoleModel::getAllRoles();
+
 $courses = CourseModel::getAllCourses();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
@@ -47,10 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     $username = $mysqli->real_escape_string($_POST['username']);
     $password = $mysqli->real_escape_string($_POST['password']);
     $repassword = $mysqli->real_escape_string($_POST['repassword']);
-    $roleId = (int) $_POST['role_id']; // Приведение к типу int
+    $name = $mysqli->real_escape_string($_POST['name']);
+    $surname = $mysqli->real_escape_string($_POST['surname']);
     $courseId = (int) $_POST['course_id']; // Приведение к типу int
 
-    $errors = isFieldsEmpty($email, $username, $password, $repassword);
+    $errors = isFieldsEmpty($email, $username, $password, $repassword, $name, $surname);
 
     if (!empty($errors)) {
         require_once("templates/register.php");
@@ -64,7 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         return;
     }
 
-    $regSuccess = $userModel->createUser($email, $username, $password, $roleId, $courseId);
+    // Обновленный вызов метода createUser  с новыми параметрами
+    $regSuccess = $userModel->createUser($email, $username, $password, $name, $surname, $courseId);
     if ($regSuccess) {
         $user = $userModel->getUserByUsername($username);
         if ($user) {

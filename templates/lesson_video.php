@@ -10,7 +10,7 @@
     <link rel="canonical" href="<?= URL_SITE ?>" />
     <link rel="stylesheet" href="<?= STYLES_PATH ?>/global.css" />
     <link rel="stylesheet" href="<?= STYLES_PATH ?>/tailwind.css">
-    <title><?= $video->getTitle() ?></title>
+    <title><?= LESSON_VIDEO_PAGE['name'] ?></title>
     <style>
         .fullscreen-container {
             width: 70%;
@@ -48,8 +48,7 @@
     <div class="flex justify-center items-center mt-4">
         <div class="fullscreen-container">
             <div class="responsive-iframe">
-                <iframe id="rutubeVideo" src="<?= $video->getUrl() ?>" allowfullscreen></iframe>
-
+                <iframe src="<?= $lesson->getVideo() ?>" allowfullscreen></iframe>
             </div>
         </div>
     </div>

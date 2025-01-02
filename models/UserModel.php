@@ -22,7 +22,7 @@ interface UserInterface
     public function isUserExists(string $username, ?string $email = null): bool; // Обновленный метод
     public function loginUser(string $username, string $password): bool; // Добавленный метод
 
-    public function createUser(string $email, string $username, string $password, int $roleId, int $courseId): bool;
+    public function createUser(string $email, string $username, string $password, string $name, string $surname, int $courseId): bool;
 }
 
 class UserModel implements UserInterface
@@ -171,13 +171,13 @@ class UserModel implements UserInterface
         return $users;
     }
 
-    public function createUser(string $email, string $username, string $password, int $roleId, int $courseId): bool
+    public function createUser(string $email, string $username, string $password, string $name, string $surname, int $courseId): bool
     {
         $mysqli = Database::getConnection();
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Обновленный SQL-запрос для вставки с учетом новых колонок
-        $sql = "INSERT INTO users (email, username, password, role_id, course_id, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
+        // Обновленный SQL-запрос без created_at
+        $sql = "INSERT INTO users (email, username, password, name, surname, course_id) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($sql);
 
         if ($stmt === false) {
@@ -185,14 +185,13 @@ class UserModel implements UserInterface
         }
 
         // Привязываем параметры
-        // 'ssiii' - s для строк (email, username, hashedPassword) и i для целых чисел (roleId, courseId)
-        $stmt->bind_param('sssii', $email, $username, $hashedPassword, $roleId, $courseId);
+        // 'ssssis' - s для строк (email, username, hashedPassword, name, surname) и i для целых чисел (courseId)
+        $stmt->bind_param('ssssis', $email, $username, $hashedPassword, $name, $surname, $courseId);
         $success = $stmt->execute();
         $stmt->close();
 
         return $success; // Возвращаем результат выполнения
     }
-
 
 
     public function isUserExists(string $username, ?string $email = null): bool // Обновленная реализация метода

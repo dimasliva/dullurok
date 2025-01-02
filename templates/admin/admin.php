@@ -8,8 +8,8 @@
         content="Уроки по HTML, CSS и JavaScript. Научитесь создавать веб-страницы и разрабатывать интерфейсы.">
     <meta name="keywords" content="HTML, CSS, JavaScript, уроки, веб-разработка, <?= LOGO_NAME ?>">
     <link rel="canonical" href="<?= URL_SITE ?>" />
-    <link rel="stylesheet" href=".<?= STYLES_PATH ?>/global.css" />
-    <link rel="stylesheet" href=".<?= STYLES_PATH ?>/tailwind.css">
+    <link rel="stylesheet" href="<?= STYLES_PATH ?>/global.css" />
+    <link rel="stylesheet" href="<?= STYLES_PATH ?>/tailwind.css">
     <title><?= ADMIN_PAGE['name'] ?></title>
 </head>
 

@@ -14,11 +14,17 @@ interface LessonInterface
     public function setId(int $id): void; // Добавляем метод для установки ID
     public function setCreatedAt(string $createdAt): void; // Добавляем метод для установки createdAt
 
+    public function setUsername(string $username): void; // Метод для установки username
+    public function getUsername(): string; // Метод для получения username
+
     // Добавляем методы для создания и получения урока
-    public function createLesson(array $file, string $video): ?int;
+    public function createLesson(array $file, string $video, int $userId): ?int;
     public function getLesson(int $id): ?LessonInterface;
     public function updateLesson(int $id, ?array $file, string $video): bool; // Новый метод
     public function deleteLesson(int $id): bool; // Новый метод для удаления урока
+
+    public function getLessonsByUserId(int $userId): array; // Новый метод для получения уроков по user_id
+
 
 }
 
@@ -28,6 +34,7 @@ class LessonModel implements LessonInterface
     private ?string $file;
     private ?string $video;
     private string $createdAt;
+    private string $username; // Добавляем поле для username
 
     public function __construct()
     {
@@ -35,9 +42,17 @@ class LessonModel implements LessonInterface
         $this->file = null; // Инициализация file
         $this->video = null; // Инициализация video
         $this->createdAt = date('Y-m-d H:i:s'); // Инициализация createdAt с текущей датой и временем
-
+        $this->username = ''; // Инициализация username
+    }
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
     }
 
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
     public function getId(): int
     {
         return $this->id;
@@ -79,7 +94,7 @@ class LessonModel implements LessonInterface
     }
 
     // Метод для создания нового урока
-    public function createLesson(array $file, string $video): ?int
+    public function createLesson(array $file, string $video, int $userId): ?int
     {
         if (!isset($file) || $file['error'] !== UPLOAD_ERR_OK) {
             throw new Exception("Ошибка загрузки файла.");
@@ -107,9 +122,9 @@ class LessonModel implements LessonInterface
         $this->setVideo($video);
 
         $mysqli = Database::getConnection();
-        $sql = "INSERT INTO lessons (file, video) VALUES (?, ?)";
+        $sql = "INSERT INTO lessons (file, video, user_id) VALUES (?, ?, ?)"; // Добавляем user_id в запрос
         $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("ss", $this->file, $this->video);
+        $stmt->bind_param("ssi", $this->file, $this->video, $userId); // Передаем userId как третий параметр
 
         if (!$stmt->execute()) {
             throw new Exception("Ошибка при добавлении урока: " . $stmt->error);
@@ -125,7 +140,9 @@ class LessonModel implements LessonInterface
     {
         $mysqli = Database::getConnection(); // Получаем соединение с базой данных
 
-        $sql = "SELECT * FROM lessons"; // SQL-запрос для получения всех уроков
+        // Измененный SQL-запрос для получения всех уроков с соответствующими именами пользователей
+        $sql = "SELECT lessons.*, users.username FROM lessons 
+                JOIN users ON lessons.user_id = users.id";
         $stmt = $mysqli->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -139,11 +156,13 @@ class LessonModel implements LessonInterface
             $lesson->setFile($row['file']);
             $lesson->setVideo($row['video']);
             $lesson->setCreatedAt($row['created_at']);
+            $lesson->setUsername($row['username']); // Устанавливаем username в объект урока
             $lessons[] = $lesson; // Добавляем объект в массив
         }
 
         return $lessons; // Возвращаем массив объектов LessonModel
     }
+
     // Функция для получения урока из базы данных
     public function getLesson(int $id): ?LessonInterface
     {
@@ -167,6 +186,38 @@ class LessonModel implements LessonInterface
 
         return null; // Если урок не найден
     }
+    /**
+     * @return LessonModel[] Массив объектов CourseModel
+     */
+    public function getLessonsByUserId(int $userId): array
+    {
+        $mysqli = Database::getConnection(); // Получаем соединение с базой данных
+
+        // SQL-запрос для получения всех уроков пользователя по user_id
+        $sql = "SELECT lessons.*, users.username FROM lessons 
+            JOIN users ON lessons.user_id = users.id 
+            WHERE lessons.user_id = ?";
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("i", $userId); // Привязываем userId как параметр
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $lessons = []; // Массив для хранения объектов уроков
+
+        // Перебираем все строки результата и создаем объекты LessonModel
+        while ($row = $result->fetch_assoc()) {
+            $lesson = new LessonModel();
+            $lesson->setId($row['id']);
+            $lesson->setFile($row['file']);
+            $lesson->setVideo($row['video']);
+            $lesson->setCreatedAt($row['created_at']);
+            $lesson->setUsername($row['username']); // Устанавливаем username в объект урока
+            $lessons[] = $lesson; // Добавляем объект в массив
+        }
+
+        return $lessons; // Возвращаем массив объектов LessonModel
+    }
+
     public function deleteLesson(int $id): bool
     {
         $mysqli = Database::getConnection(); // Получаем соединение с базой данных

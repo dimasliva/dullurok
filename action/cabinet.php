@@ -1,7 +1,7 @@
 <?php
 require_once("models/RoleModel.php");
 require_once("models/CourseModel.php");
-require_once("models/UserLessonModel.php");
+require_once("models/LessonModel.php");
 require_once("models/UserModel.php");
 
 
@@ -17,8 +17,8 @@ $courseModel = new CourseModel();
 $user = $userModel->getUser($userId);
 
 if (!$user) {
-    echo "<div class='text-danger'>Пользователь не найден</div>";
-    return;
+    session_destroy();
+    header("Location:" . LOGIN_PAGE['url']);
 }
 
 // Use getter methods to access user properties
@@ -34,13 +34,12 @@ if (!$courseId) {
 }
 
 $course = $courseModel->getCourse($courseId);
-$userLessonModel = new UserLessonModel();
-$userLessons = $userLessonModel->getUserLessons($user->getId());
+$lessonModel = new LessonModel();
+$userLessons = $lessonModel->getLessonsByUserId($user->getId());
 $lessons = [];
 
 foreach ($userLessons as $userLesson) {
-    $lessonId = $userLesson->getLessonId();
-    $lessons[] = $userLesson->getLesson($lessonId); // Получаем объект LessonModel
+    $lessons[] = $userLesson;
 }
 
 require_once("templates/cabinet.php");
