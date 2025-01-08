@@ -71,5 +71,19 @@ const DONATION_PAGE = [
     'name' => 'Пожертвование',
     'file' => 'action/donation.php',
 ];
-
+const BUY_LESSON_PAGE = [
+    'url' => '/buy/lesson',
+    'name' => 'Купить занятие',
+    'file' => 'action/buy_lesson.php',
+];
+const CHECKOUT_PAGE = [
+    'url' => '/checkout',
+    'name' => 'Оформление заказа',
+    'file' => 'action/checkout.php',
+];
+const PAYMENT_PAGE = [
+    'url' => '/payment',
+    'name' => 'Оплата',
+    'file' => 'action/payment.php',
+];
 ?>

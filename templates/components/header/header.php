@@ -10,7 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['exit'])) {
     }
 }
 ?>
-<script src="templates/components/header/header.js" defer></script>
+<style>
+    .burger-menu svg {
+        width: 20px;
+        height: 20px;
+        filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(161deg) brightness(107%) contrast(100%);
+    }
+</style>
+<script src="/templates/components/header/header.js" defer></script>
 
 <nav class="bg-gray-900 shadow">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -21,20 +28,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['exit'])) {
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                     aria-controls="mobile-menu" aria-expanded="false">
                     <span class="sr-only">Открыть главное меню</span>
-                    <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                    <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <span class="burger-menu">
+                        <?php include(SVGS_PATH . '/burger-menu.svg') ?>
+                    </span>
                 </button>
             </div>
+
             <div class="flex-1 flex items-center justify-between sm:items-stretch sm:justify-between">
-                <h1 class="flex items-center text-xl font-bold"><?= LOGO_NAME ?></h1>
+
+
+                <div class="flex items-center">
+                    <?php if (isset($_SESSION['loggedin'])): ?>
+                        <button id="toggle-sidebar" class="p-2 mr-2 bg-gray-800 rounded focus:outline-none">
+                            <span class="burger-menu">
+                                <?php include(SVGS_PATH . '/burger-menu.svg') ?>
+                            </span>
+                        </button>
+                    <?php endif; ?>
+                    <h1 class="flex items-center text-xl font-bold"><?= LOGO_NAME ?></h1>
+                </div>
                 <div class="hidden sm:block sm:ml-6">
                     <div class="flex space-x-4">
                         <a href="<?= HOME_PAGE['url'] ?>"
@@ -75,6 +87,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['exit'])) {
                         <?php endif; ?>
 
                     </div>
+                </div>
+            </div>
+            <!-- Sidebar -->
+            <div id="sidebar"
+                class="fixed inset-y-0 left-0 bg-gray-800 w-64 transform -translate-x-full transition-transform duration-300">
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold mb-4">Навигация</h2>
+                    <ul>
+                        <li class="mb-2"><a href="#" class="text-blue-400 hover:underline">Профиль</a></li>
+                        <li class="mb-2"><a href="#" class="text-blue-400 hover:underline">Мои занятия</a></li>
+                        <li class="mb-2"><a href=<?= BUY_LESSON_PAGE['url'] ?>
+                                class="text-blue-400 hover:underline">Купить занятие</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

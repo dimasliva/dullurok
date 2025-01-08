@@ -16,25 +16,8 @@
 <body class="bg-gray-900 text-white">
     <?php require_once("templates/components/header/header.php") ?>
 
-    <!-- Иконка для открытия/закрытия sidebar -->
-    <button id="toggle-sidebar" class="p-2 bg-gray-800 rounded focus:outline-none">
-        <span class="material-icons">menu</span> <!-- Используйте Material Icons или любую другую иконку -->
-    </button>
 
     <div class="flex">
-        <!-- Sidebar -->
-        <div id="sidebar"
-            class="fixed inset-y-0 left-0 bg-gray-800 w-64 transform -translate-x-full transition-transform duration-300">
-            <div class="p-4">
-                <h2 class="text-xl font-semibold mb-4">Навигация</h2>
-                <ul>
-                    <li class="mb-2"><a href="#" class="text-blue-400 hover:underline">Профиль</a></li>
-                    <li class="mb-2"><a href="#" class="text-blue-400 hover:underline">Мои занятия</a></li>
-                    <li class="mb-2"><a href="#" class="text-blue-400 hover:underline">Купить занятие</a></li>
-                </ul>
-            </div>
-        </div>
-
         <div class="container mx-auto p-8 flex-1">
             <h1 class="text-2xl font-bold mb-6">Кабинет пользователя</h1>
 
@@ -81,29 +64,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const toggleButton = document.getElementById('toggle-sidebar');
-            const sidebar = document.getElementById('sidebar');
-
-            toggleButton.addEventListener('click', function () {
-                sidebar.classList.toggle('-translate-x-full');
-            });
-
-            // Закрытие sidebar при клике вне его области
-            document.addEventListener('click', function (event) {
-                const isClickInsideSidebar = sidebar.contains(event.target);
-                const isClickToggleButton = toggleButton.contains(event.target);
-
-                // Если клик был вне sidebar и не на кнопке
-                if (!isClickInsideSidebar && !isClickToggleButton) {
-                    sidebar.classList.add('-translate-x-full'); // Закрываем sidebar
-                }
-            });
-        });
-    </script>
-
 </body>
 
 </html>
