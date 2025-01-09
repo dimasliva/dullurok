@@ -42,9 +42,13 @@ class EventModel implements EventInterface
     // Метод для создания нового события
     public function createEvent($userId, $description, $eventDate)
     {
+        // Преобразуем дату из формата ISO 8601 в формат MySQL
+        $dateTime = new DateTime($eventDate);
+        $formattedDate = $dateTime->format('Y-m-d H:i:s'); // Преобразуем в формат MySQL
+
         $query = "INSERT INTO events (user_id, description, event_date) VALUES (?, ?, ?)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('iss', $userId, $description, $eventDate); // 'i' - целое, 's' - строка
+        $stmt->bind_param('iss', $userId, $description, $formattedDate); // 'i' - целое, 's' - строка
         if ($stmt->execute()) {
             $this->id = $stmt->insert_id; // Сохраняем ID нового события, если нужно
             return true; // Возвращаем true, если событие успешно создано

@@ -10,6 +10,7 @@ const URL_SITE = "https://dull.local/";
 const IMGS_PATH = "/css/images";
 const SVGS_PATH = "./css/svgs";
 const STYLES_PATH = "/css/styles";
+const JS_PATH = "/css/js";
 
 const HOME_PAGE = [
     'url' => '/',

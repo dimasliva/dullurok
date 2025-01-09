@@ -26,14 +26,30 @@
                 <div class="space-y-4">
                     <div class="flex items-center">
                         <input type="radio" id="umoney" name="payment" value="umoney"
-                            class="w-4 h-4 text-green-500 border-gray-300 focus:ring-green-500">
+                            class="w-4 h-4 text-green-500 border-gray-300 focus:ring-green-500" checked>
                         <label for="umoney" class="ml-2 text-gray-300">ЮMoney</label>
                     </div>
-                    <div class="flex items-center">
+                    <!-- <div class="flex items-center">
                         <input type="radio" id="bank" name="payment" value="bank"
                             class="w-4 h-4 text-green-500 border-gray-300 focus:ring-green-500">
                         <label for="bank" class="ml-2 text-gray-300">Банковский перевод</label>
+                    </div> -->
+                </div>
+            </div>
+
+            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 mb-6">
+                <h2 class="text-2xl font-semibold mb-4">Способ оплаты</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <input type="radio" id="umoney" name="payment" value="umoney"
+                            class="w-4 h-4 text-green-500 border-gray-300 focus:ring-green-500" checked>
+                        <label for="umoney" class="ml-2 text-gray-300">ЮMoney</label>
                     </div>
+                    <!-- <div class="flex items-center">
+                        <input type="radio" id="bank" name="payment" value="bank"
+                            class="w-4 h-4 text-green-500 border-gray-300 focus:ring-green-500">
+                        <label for="bank" class="ml-2 text-gray-300">Банковский перевод</label>
+                    </div> -->
                 </div>
             </div>
 
