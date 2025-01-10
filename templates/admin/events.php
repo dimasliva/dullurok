@@ -45,8 +45,60 @@
             <input type="submit" value="Создать событие" name="submit"
                 class="mt-4 w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300">
         </form>
-    </div>
-</body>
 
+        <h2 class="text-xl font-bold mt-6">Существующие события:</h2>
+        <table class="min-w-full bg-gray-800 text-white">
+            <thead>
+                <tr>
+                    <th class="py-2">ID</th>
+                    <th class="py-2">Пользователь</th>
+                    <th class="py-2">Описание</th>
+                    <th class="py-2">Дата события</th>
+                    <th class="py-2">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($eventsWithUsernames as $event): ?>
+                    <tr>
+                        <td class="py-2"><?= htmlspecialchars($event->getId()) ?></td>
+                        <td class="py-2"><?= htmlspecialchars($event->getUsername()) ?></td>
+                        <!-- Используем метод getUsername -->
+                        <td class="py-2"><?= htmlspecialchars($event->getDescription()) ?></td>
+                        <!-- Используем метод getDescription -->
+                        <td class="py-2"><?= htmlspecialchars($event->getEventDate()) ?></td>
+                        <!-- Используем метод getEventDate -->
+                        <td class="py-2">
+                            <form action="" method="POST" class="inline">
+                                <input type="hidden" name="event_id" value="<?= $event->getId() ?>">
+                                <!-- Используем метод getId -->
+                                <button type="submit" name="delete"
+                                    class="bg-red-600 text-white px-2 py-1 rounded">Удалить</button>
+                            </form>
+                            <button
+                                onclick="editEvent(<?= $event->getId() ?>, <?= $event->getUserId() ?>, '<?= htmlspecialchars($event->getDescription()) ?>', '<?= htmlspecialchars($event->getEventDate()) ?>')"
+                                class="bg-blue-600 text-white px-2 py-1 rounded">Редактировать</button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function editEvent(id, userId, description, eventDate) {
+            document.getElementById('user_id').value = userId;
+            document.getElementById('description').value = description;
+            document.getElementById('event_date').value = eventDate;
+
+            // Добавляем скрытое поле с ID события для обновления
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.innerHTML = `<input type="hidden" name="event_id" value="${id}"><input type="hidden" name="update" value="1">`;
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</body>
 
 </html>
