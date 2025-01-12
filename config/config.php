@@ -39,8 +39,13 @@ const LOGIN_PAGE = [
 ];
 const CABINET_PAGE = [
     'url' => '/cabinet',
-    'name' => 'Личный кабинет',
-    'file' => 'action/cabinet.php',
+    'name' => 'Мой профиль',
+    'file' => 'action/cabinet/profile.php',
+];
+const CABINET_LESSONS_PAGE = [
+    'url' => '/cabinet/lessons',
+    'name' => 'Мои занятия',
+    'file' => 'action/cabinet/lessons.php',
 ];
 const LESSON_VIDEO_PAGE = [
     'url' => '/lesson/video',
@@ -87,4 +92,5 @@ const PAYMENT_PAGE = [
     'name' => 'Оплата',
     'file' => 'action/payment.php',
 ];
+
 ?>

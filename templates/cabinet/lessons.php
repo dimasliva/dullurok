@@ -19,12 +19,11 @@
 
     <div class="flex">
         <div class="container mx-auto p-8 flex-1">
-            <h1 class="text-2xl font-bold mb-6">Кабинет пользователя</h1>
+            <h1 class="text-2xl font-bold mb-6">Мои занятия</h1>
 
             <div class="grid grid-cols-4 gap-6">
-                <!-- Занятия -->
                 <div class="col-span-3">
-                    <h2 class="text-xl font-semibold mb-4">Занятия</h2>
+                    <h2 class="text-xl font-semibold mb-4">Пройденные занятия</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Карточка занятия -->
                         <?php if (isset($lessons)): ?>
@@ -44,22 +43,10 @@
                     </div>
                 </div>
 
-                <div class="col-span-1">
-                    <!-- Карточка пользователя -->
-                    <div class="bg-gray-800 shadow-md rounded-lg p-4">
-                        <h2 class="text-xl font-semibold mb-4">Профиль</h2>
-                        <div class="flex flex-col gap-4">
-                            <p class="text-gray-400"><strong>Логин:</strong> <?= $user->getUsername() ?></p>
-                            <p class="text-gray-400"><strong>Курс:</strong> <?= $course->getCourseName() ?></p>
-                            <p class="text-gray-400"><strong>Начало обучения:</strong> <?= $user->getCreatedAt() ?></p>
-                        </div>
-                    </div>
-
-                    <!-- Календарь занятий -->
-                    <div class="mb-8 mt-4">
-                        <h2 class="text-xl font-semibold mb-4">Календарь занятий</h2>
-                        <?php require_once("templates/components/calendar/calendar.php") ?>
-                    </div>
+                <!-- Календарь занятий -->
+                <div class="mb-8 mt-4">
+                    <h2 class="text-xl font-semibold mb-4">Календарь занятий</h2>
+                    <?php require_once("templates/components/calendar/calendar.php") ?>
                 </div>
             </div>
         </div>

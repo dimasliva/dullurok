@@ -25,3 +25,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+const userCircle = document.getElementById("user_circle");
+const dropdownMenu = document.getElementById("dropdownMenu");
+
+userCircle.addEventListener("click", () => {
+  dropdownMenu.classList.toggle("open");
+});
+
+// Закрыть dropdown при клике вне его
+window.addEventListener("click", (event) => {
+  if (
+    !userCircle.contains(event.target) &&
+    !dropdownMenu.contains(event.target)
+  ) {
+    dropdownMenu.classList.remove("open");
+  }
+});

@@ -19,7 +19,8 @@
     <div class="container mx-auto p-6">
         <h1 class="text-2xl font-bold mb-4"><?= ADMIN_EVENTS_PAGE['name'] ?></h1>
 
-        <form action="" method="POST" class="bg-gray-800 p-4 rounded-lg shadow-md">
+        <form id="eventForm" action="" method="POST" class="bg-gray-800 p-4 rounded-lg shadow-md">
+            <input type="hidden" name="event_id" id="event_id">
             <div class="mb-4">
                 <label for="user_id" class="block text-sm font-medium">ID пользователя:</label>
                 <select id="user_id" name="user_id" required
@@ -50,54 +51,56 @@
         <table class="min-w-full bg-gray-800 text-white">
             <thead>
                 <tr>
-                    <th class="py-2">ID</th>
-                    <th class="py-2">Пользователь</th>
-                    <th class="py-2">Описание</th>
-                    <th class="py-2">Дата события</th>
-                    <th class="py-2">Действия</th>
+                    <th class="py-2 text-center">ID</th>
+                    <th class="py-2 text-center">Пользователь</th>
+                    <th class="py-2 text-center">Описание</th>
+                    <th class="py-2 text-center">Дата события</th>
+                    <th class="py-2 text-center">Действия</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($eventsWithUsernames as $event): ?>
                     <tr>
-                        <td class="py-2"><?= htmlspecialchars($event->getId()) ?></td>
-                        <td class="py-2"><?= htmlspecialchars($event->getUsername()) ?></td>
-                        <!-- Используем метод getUsername -->
-                        <td class="py-2"><?= htmlspecialchars($event->getDescription()) ?></td>
-                        <!-- Используем метод getDescription -->
-                        <td class="py-2"><?= htmlspecialchars($event->getEventDate()) ?></td>
-                        <!-- Используем метод getEventDate -->
-                        <td class="py-2">
+                        <td class="py-2 text-center"><?= htmlspecialchars($event->getId()) ?></td>
+                        <td class="py-2 text-center"><?= htmlspecialchars($event->getUsername()) ?></td>
+                        <td class="py-2 text-center"><?= htmlspecialchars($event->getDescription()) ?></td>
+                        <td class="py-2 text-center"><?= htmlspecialchars($event->getEventDate()) ?></td>
+                        <td class="py-2 text-center">
                             <form action="" method="POST" class="inline">
                                 <input type="hidden" name="event_id" value="<?= $event->getId() ?>">
-                                <!-- Используем метод getId -->
                                 <button type="submit" name="delete"
                                     class="bg-red-600 text-white px-2 py-1 rounded">Удалить</button>
                             </form>
-                            <button
-                                onclick="editEvent(<?= $event->getId() ?>, <?= $event->getUserId() ?>, '<?= htmlspecialchars($event->getDescription()) ?>', '<?= htmlspecialchars($event->getEventDate()) ?>')"
-                                class="bg-blue-600 text-white px-2 py-1 rounded">Редактировать</button>
+                            <button class="bg-blue-600 text-white px-2 py-1 rounded edit-button"
+                                data-id="<?= htmlspecialchars($event->getId()) ?>"
+                                data-user="<?= htmlspecialchars($event->getUserId()) ?>"
+                                data-description="<?= htmlspecialchars($event->getDescription()) ?>"
+                                data-date="<?= htmlspecialchars($event->getEventDate()) ?>">Редактировать</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
-
             </tbody>
         </table>
     </div>
 
     <script>
-        function editEvent(id, userId, description, eventDate) {
-            document.getElementById('user_id').value = userId;
-            document.getElementById('description').value = description;
-            document.getElementById('event_date').value = eventDate;
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const eventId = this.getAttribute('data-id');
+                const userId = this.getAttribute('data-user');
+                const description = this.getAttribute('data-description');
+                const eventDate = this.getAttribute('data-date');
 
-            // Добавляем скрытое поле с ID события для обновления
-            let form = document.createElement('form');
-            form.method = 'POST';
-            form.innerHTML = `<input type="hidden" name="event_id" value="${id}"><input type="hidden" name="update" value="1">`;
-            document.body.appendChild(form);
-            form.submit();
-        }
+                document.getElementById('event_id').value = eventId;
+                document.getElementById('user_id').value = userId;
+                document.getElementById('description').value = description;
+                document.getElementById('event_date').value = eventDate;
+
+                const submitButton = document.querySelector('input[type="submit"]');
+                submitButton.value = "Обновить событие";
+                submitButton.name = "update"; // Устанавливаем имя кнопки как "update"
+            });
+        });
     </script>
 </body>
 

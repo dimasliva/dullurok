@@ -42,4 +42,4 @@ foreach ($userLessons as $userLesson) {
     $lessons[] = $userLesson;
 }
 
-require_once("templates/cabinet.php");
+require_once("templates/cabinet/profile.php");

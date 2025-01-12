@@ -13,6 +13,8 @@ if ($requestUri === REGISTER_PAGE['url']) {
     require_once(SOCIALS_PAGE['file']);
 } elseif ($requestUri === CABINET_PAGE['url']) {
     require_once(CABINET_PAGE['file']);
+} elseif ($requestUri === CABINET_LESSONS_PAGE['url']) {
+    require_once(CABINET_LESSONS_PAGE['file']);
 } elseif ($requestUri === ADMIN_EVENTS_PAGE['url']) {
     require_once(ADMIN_EVENTS_PAGE['file']);
 } elseif ($requestUri === ADMIN_LESSON_PAGE['url']) {

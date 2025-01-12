@@ -10,6 +10,8 @@ interface EventInterface
     public function getUserId();
     public function getDescription();
     public function getEventDate();
+    public function getEventById($id);
+
 }
 
 class EventModel implements EventInterface
@@ -58,6 +60,16 @@ class EventModel implements EventInterface
         }
         return false; // Возвращаем false в случае ошибки
     }
+    public function getEventById($id)
+    {
+        $query = "SELECT * FROM events WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        return $result->fetch_assoc(); // Возвращаем событие как ассоциативный массив
+    }
 
     /**
      * @return EventModel[] Массив объектов CourseModel
@@ -83,7 +95,8 @@ class EventModel implements EventInterface
     // Метод для обновления события
     public function updateEvent($id, $userId, $description, $eventDate)
     {
-        $dateTime = new DateTime($eventDate);
+        // Ensure $eventDate is in the correct format
+        $dateTime = new DateTime($eventDate); // This should be a single date-time string
         $formattedDate = $dateTime->format('Y-m-d H:i:s');
 
         $query = "UPDATE events SET user_id = ?, description = ?, event_date = ? WHERE id = ?";

@@ -118,11 +118,11 @@
                 <?php
                 // Выводим соответствующий iframe в зависимости от значения $price
                 if ($price == 400) {
-                    echo '<a href="https://yoomoney.ru/transfer/quickpay?requestId=353534353232393839395f31313861383938333431346135663063643930323735303130343962346438663639663935613431" target="_blank" class="inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-300">Перевести: 400 рублей</a>';
+                    echo '<img src="/css/images/umoneyQR.png"/>';
                 } elseif ($price == 4000) {
-                    echo '<a href="https://yoomoney.ru/transfer/quickpay?requestId=353534353232393333345f65316638333064613738333038646538653635363538323539383761316232626137336263393536" target="_blank" class="inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-300">Перевести: 4000 рублей</a>';
+                    echo '<img src="/css/images/umoneyQR.png"/>';
                 } elseif ($price == 1200) {
-                    echo '<a href="https://yoomoney.ru/transfer/quickpay?requestId=353534353232383534305f39386636353537393432386137316566316334383634643533626633366264303365396465643035" target="_blank" class="inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-300">Перевести: 12000 рублей</a>';
+                    echo '<img src="/css/images/umoneyQR.png"/>';
                 } else {
                     echo '<p class="text-red-500">Ошибка: Неподдерживаемая цена.</p>';
                 }
